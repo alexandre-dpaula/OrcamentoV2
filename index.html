@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#000000">
     <meta property="og:title" content="Seu Orçamento | Produtora Audiovisual">
     <meta property="og:description" content="Serviços de vídeo, fotografia e marketing digital.">
-    <meta property="og:image" content="https://i.pinimg.com/1200x/80/f7/21/80f72141da9348cb7254a66c116fb7a4.jpg">
+    <meta property="og:image" content="public/og-image.jpg">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff6b35'/%3E%3C/svg%3E">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -213,21 +213,12 @@
 
     <main class="container">
         <nav class="tabs">
-            <button class="tab tab--active" data-tab="social" onclick="switchTab('social')">Rede Social</button>
+            <button class="tab tab--active" data-tab="todos" onclick="switchTab('todos')">Todos</button>
+            <button class="tab" data-tab="social" onclick="switchTab('social')">Rede Social</button>
             <button class="tab" data-tab="mkt" onclick="switchTab('mkt')">Marketing</button>
             <button class="tab" data-tab="emp" onclick="switchTab('emp')">Sua Empresa</button>
             <button class="tab" data-tab="pkg" onclick="switchTab('pkg')">Pacotes</button>
         </nav>
-
-        <!-- Buscador -->
-        <div class="search">
-            <svg class="icon search__icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" class="search__input" id="searchInput" placeholder="Buscar serviços..." oninput="handleSearch()" onfocus="handleSearch()">
-            <button class="search__clear" id="searchClear" onclick="clearSearch()">
-                <svg class="icon-sm" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-            <div class="search__results" id="searchResults"></div>
-        </div>
 
         <div class="score">
             <div class="score__row">
@@ -244,7 +235,7 @@
                 </div>
             </div>
             <div class="score__meta">
-                <span class="score__label" id="scoreLabel">Monte seu orçamento</span>
+                <span class="score__label" id="scoreLabel">Selecione os serviços</span>
                 <span class="score__count" id="scoreCount">0 serviços</span>
             </div>
             <div class="spectrum">
@@ -252,8 +243,23 @@
             </div>
         </div>
 
+        <!-- Buscador -->
+        <div class="search">
+            <svg class="icon search__icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" class="search__input" id="searchInput" placeholder="Buscar serviços..." oninput="handleSearch()" onfocus="handleSearch()">
+            <button class="search__clear" id="searchClear" onclick="clearSearch()">
+                <svg class="icon-sm" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <div class="search__results" id="searchResults"></div>
+        </div>
+
+        <!-- TODOS -->
+        <div class="tab-content tab-content--active" id="tab-todos">
+            <div class="grid" id="g-todos"></div>
+        </div>
+
         <!-- REDE SOCIAL -->
-        <div class="tab-content tab-content--active" id="tab-social">
+        <div class="tab-content" id="tab-social">
             <div class="accordion">
                 <div class="acc acc--open">
                     <div class="acc__head" onclick="toggleAcc(this)">
@@ -594,6 +600,11 @@ function renderPkg(p){
 </div>`}
 
 function render(){
+    // Renderiza tab Todos (todos os serviços)
+    const todosEl = document.getElementById('g-todos');
+    if(todosEl) todosEl.innerHTML = all().map(renderSvc).join('');
+    
+    // Renderiza categorias específicas
     Object.keys(D).forEach(k=>{const g=document.getElementById('g-'+k);if(g)g.innerHTML=D[k].map(renderSvc).join('')});
     document.getElementById('pkgContainer').innerHTML=PKG.map(renderPkg).join('');
     updBadges();updScore();
